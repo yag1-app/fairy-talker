@@ -23,14 +23,14 @@ def webhook(request):
         body = request.get_json(silent=True)
         print("BODY:", json.dumps(body, ensure_ascii=False))
 
-        # イベントが無い or 空のときは400を返す
+        # イベントが無い or 空のときも応答コードは200を返す
         if not body or 'events' not in body or len(body['events']) == 0:
             print("No events received.")
             return 'No events', 200
 
         event = body['events'][0]
         if event['type'] != 'message' or event['message']['type'] != 'text':
-            return 'Event type not supported', 200  # 応答は200にするのがLINEの仕様
+            return 'Event type not supported', 200  # 応答コードは200にするのがLINEの仕様
         reply_token = event['replyToken']
         user_message = event['message']['text']
         user_id = event['source']['userId']
